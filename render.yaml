@@ -1,7 +1,8 @@
 services:
   - type: web
-    name: expense-tracker-backend
+    name: expense-tracker-api
     env: node
+    plan: free
     buildCommand: cd backend && npm install
     startCommand: cd backend && npm start
     envVars:

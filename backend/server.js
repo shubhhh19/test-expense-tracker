@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env' });
 
 const sequelize = require('./config/database');
 
@@ -95,10 +95,11 @@ const initializeDatabase = async () => {
             console.log('Error creating enum type:', error.message);
         }
 
-        // Sync all models
+        // Sync all models - don't use force: true in production
         try {
-            // Sync all models with force: true to drop and recreate tables
-            await sequelize.sync({ force: true });
+            const force = process.env.NODE_ENV !== 'production';
+            console.log(`Syncing models with force=${force}`);
+            await sequelize.sync({ force });
             console.log('All models synchronized successfully');
         } catch (error) {
             console.error('Error synchronizing models:', error);
