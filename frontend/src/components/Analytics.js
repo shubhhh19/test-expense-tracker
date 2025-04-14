@@ -71,9 +71,9 @@ function Analytics() {
       const startDateStr = startDate.toISOString().split('T')[0];
 
       const [monthlyTrends, summaryResponse, budgetAnalysis] = await Promise.all([
-        api.get('/analytics/trend', { params: { months: 12 } }),
-        api.get('/analytics/summary', { params: { startDate: startDateStr, endDate } }),
-        api.get('/analytics/budget-analysis', { params: { startDate: startDateStr, endDate } })
+        api.get('/api/analytics/trend', { params: { months: 12 } }),
+        api.get('/api/analytics/summary', { params: { startDate: startDateStr, endDate } }),
+        api.get('/api/analytics/budget-analysis', { params: { startDate: startDateStr, endDate } })
       ]);
 
       console.log('Monthly Trends:', monthlyTrends.data);

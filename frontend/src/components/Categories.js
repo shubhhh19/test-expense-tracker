@@ -129,7 +129,7 @@ function Categories() {
         toast.error('Please login to view categories');
         return;
       }
-      const response = await api.get('/categories');
+      const response = await api.get('/api/categories');
       if (response.data.success) {
         setCategories(response.data.data);
       }
@@ -163,7 +163,7 @@ function Categories() {
 
   const handleAddCategory = async (categoryData) => {
     try {
-      await api.post('/categories', categoryData);
+      await api.post('/api/categories', categoryData);
       toast.success('Category added successfully');
       fetchCategories();
       setDialogOpen(false);
@@ -175,7 +175,7 @@ function Categories() {
   const handleUpdateCategory = async (categoryData) => {
     try {
       await api.put(
-        `/categories/${selectedCategory.id}`,
+        `/api/categories/${selectedCategory.id}`,
         categoryData
       );
       toast.success('Category updated successfully');
@@ -189,7 +189,7 @@ function Categories() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await api.delete(`/categories/${selectedCategory.id}`);
+      await api.delete(`/api/categories/${selectedCategory.id}`);
       toast.success('Category deleted successfully');
       fetchCategories();
     } catch (error) {

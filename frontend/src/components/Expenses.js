@@ -104,7 +104,7 @@ function Expenses() {
         toast.error('Please login to view expenses');
         return;
       }
-      const response = await api.get('/expenses');
+      const response = await api.get('/api/expenses');
       if (response.data.success) {
         setExpenses(response.data.data);
       }
@@ -152,7 +152,7 @@ function Expenses() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await api.delete(`/expenses/${selectedExpense.id}`);
+      await api.delete(`/api/expenses/${selectedExpense.id}`);
       toast.success('Expense deleted successfully');
       fetchExpenses();
     } catch (error) {

@@ -12,7 +12,7 @@ const fetchBudgets = async () => {
       toast.error('Please login to view budgets');
       return;
     }
-    const response = await api.get('/budgets');
+    const response = await api.get('/api/budgets');
     if (response.data.success) {
       setBudgets(response.data.data);
     }

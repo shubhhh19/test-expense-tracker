@@ -75,7 +75,7 @@ function Dashboard() {
           toast.error('Please login to view dashboard');
           return;
         }
-        const response = await api.get('/dashboard');
+        const response = await api.get('/api/dashboard');
 
         console.log('Dashboard data:', response.data);
 
