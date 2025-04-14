@@ -29,7 +29,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://expense-tracker-frontend.onrender.com'] 
+    ? [process.env.FRONTEND_URL, 'https://expense-tracker8887735.netlify.app'] 
     : ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:3001'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
@@ -47,6 +47,28 @@ app.use('/api/users', userRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
+// Add a root route to confirm API is working
+app.get('/', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'Expense Tracker API is running',
+    endpoints: ['/api/auth', '/api/expenses', '/api/categories', '/api/budgets', '/api/analytics', '/api/dashboard']
+  });
+});
+
+// Add a route to show API status
+app.get('/api', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'API endpoints are available',
+    routes: [
+      { path: '/api/auth/register', method: 'POST', description: 'Register a new user' },
+      { path: '/api/auth/login', method: 'POST', description: 'Login user' },
+      { path: '/api/auth/me', method: 'GET', description: 'Get current user' }
+    ]
+  });
+});
+
 // Error handling middleware
 app.use((err, req, res, next) => {
     console.error(err.stack);
@@ -57,7 +79,16 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = process.env.PORT || 5000;
+// Handle 404 errors
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: `Cannot ${req.method} ${req.originalUrl}`,
+        suggestion: 'Check the API documentation for correct endpoints'
+    });
+});
+
+const PORT = process.env.PORT || 5001;
 
 // Default categories that will be created for each user
 const DEFAULT_CATEGORIES = [
@@ -83,8 +114,7 @@ const initializeDatabase = async () => {
 
         // Create enum type for category type if it doesn't exist
         try {
-            await sequelize.query(`
-                DO $$ BEGIN
+            await sequelize.query(`                DO $$ BEGIN
                     CREATE TYPE "public"."enum_categories_type" AS ENUM ('expense', 'income');
                 EXCEPTION
                     WHEN duplicate_object THEN null;

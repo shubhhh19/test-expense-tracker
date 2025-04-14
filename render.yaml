@@ -11,23 +11,11 @@ services:
       - key: PORT
         value: 10000
       - key: JWT_SECRET
-        generateValue: true
-      - key: DB_NAME
-        fromDatabase:
-          name: expense-tracker-db
-          property: database
-      - key: DB_USER
-        fromDatabase:
-          name: expense-tracker-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: expense-tracker-db
-          property: password
-      - key: DB_HOST
-        fromDatabase:
-          name: expense-tracker-db
-          property: host
+        value: a5f9e31c8b2d7e6412fd89g7h5j3k2l1m
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_q4HTixdL0hDN@ep-late-shape-a5rtlmi5-pooler.us-east-2.aws.neon.tech/neondb?sslmode=require
+      - key: FRONTEND_URL
+        value: https://expense-tracker8887735.netlify.app
 
   - type: web
     name: expense-tracker-frontend
@@ -36,7 +24,7 @@ services:
     staticPublishPath: ./frontend/build
     envVars:
       - key: REACT_APP_API_URL
-        value: https://expense-tracker-backend.onrender.com/api
+        value: https://test-expense-tracker-shhn.onrender.com/api
 
 databases:
   - name: expense-tracker-db

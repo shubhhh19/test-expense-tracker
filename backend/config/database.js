@@ -1,7 +1,10 @@
 const { Sequelize } = require('sequelize');
-require('dotenv').config();
+require('dotenv').config({ path: process.env.NODE_ENV === 'production' ? '.env.production' : '.env' });
 
 let sequelize;
+
+console.log('NODE_ENV:', process.env.NODE_ENV);
+console.log('Using DATABASE_URL:', !!process.env.DATABASE_URL);
 
 // Use DATABASE_URL if available (production/Neon), otherwise use individual parameters
 if (process.env.DATABASE_URL) {
@@ -14,8 +17,9 @@ if (process.env.DATABASE_URL) {
                 rejectUnauthorized: false // Use in case of certificate issues
             }
         },
-        logging: process.env.NODE_ENV === 'production' ? false : console.log
+        logging: false
     });
+    console.log('Using production database connection');
 } else {
     // For local development
     sequelize = new Sequelize(
@@ -28,6 +32,7 @@ if (process.env.DATABASE_URL) {
             logging: console.log
         }
     );
+    console.log('Using local database connection');
 }
 
 // Test the connection and create database if it doesn't exist
