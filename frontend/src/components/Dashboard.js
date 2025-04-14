@@ -8,7 +8,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Line } from 'react-chartjs-2';
-import api from '../services/api';
+import { fetchDashboard } from '../services/apiService';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -75,7 +75,7 @@ function Dashboard() {
           toast.error('Please login to view dashboard');
           return;
         }
-        const response = await api.get('/api/dashboard');
+        const response = await fetchDashboard();
 
         console.log('Dashboard data:', response.data);
 

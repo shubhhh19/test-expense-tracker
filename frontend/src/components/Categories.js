@@ -23,7 +23,7 @@ import AddIcon from '@mui/icons-material/Add';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import api from '../utils/api';
+import { fetchCategories, createCategory, updateCategory, deleteCategory } from '../services/apiService';
 import { toast } from 'react-toastify';
 
 const StyledCard = styled(Card)(({ theme }) => ({
@@ -118,10 +118,10 @@ function Categories() {
   const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
   useEffect(() => {
-    fetchCategories();
+    fetchCategoriesData();
   }, []);
 
-  const fetchCategories = async () => {
+  const fetchCategoriesData = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
@@ -129,7 +129,7 @@ function Categories() {
         toast.error('Please login to view categories');
         return;
       }
-      const response = await api.get('/api/categories');
+      const response = await fetchCategories();
       if (response.data.success) {
         setCategories(response.data.data);
       }
@@ -163,9 +163,9 @@ function Categories() {
 
   const handleAddCategory = async (categoryData) => {
     try {
-      await api.post('/api/categories', categoryData);
+      await createCategory(categoryData);
       toast.success('Category added successfully');
-      fetchCategories();
+      fetchCategoriesData();
       setDialogOpen(false);
     } catch (error) {
       toast.error('Failed to add category');
@@ -174,12 +174,9 @@ function Categories() {
 
   const handleUpdateCategory = async (categoryData) => {
     try {
-      await api.put(
-        `/api/categories/${selectedCategory.id}`,
-        categoryData
-      );
+      await updateCategory(selectedCategory.id, categoryData);
       toast.success('Category updated successfully');
-      fetchCategories();
+      fetchCategoriesData();
       setDialogOpen(false);
       setSelectedCategory(null);
     } catch (error) {
@@ -189,9 +186,9 @@ function Categories() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await api.delete(`/api/categories/${selectedCategory.id}`);
+      await deleteCategory(selectedCategory.id);
       toast.success('Category deleted successfully');
-      fetchCategories();
+      fetchCategoriesData();
     } catch (error) {
       toast.error('Failed to delete category');
     }

@@ -1,10 +1,10 @@
 import { toast } from 'react-toastify';
-import api from '../utils/api';
+import { fetchBudgets } from '../services/apiService';
 
 // Remove the outdated API_BASE_URL
 // const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 
-const fetchBudgets = async () => {
+const fetchBudgetsData = async () => {
   try {
     setLoading(true);
     const token = localStorage.getItem('token');
@@ -12,7 +12,7 @@ const fetchBudgets = async () => {
       toast.error('Please login to view budgets');
       return;
     }
-    const response = await api.get('/api/budgets');
+    const response = await fetchBudgets();
     if (response.data.success) {
       setBudgets(response.data.data);
     }

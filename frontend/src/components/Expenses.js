@@ -43,7 +43,7 @@ import PetsIcon from '@mui/icons-material/Pets';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import api from '../services/api';
+import { fetchExpenses, deleteExpense } from '../services/apiService';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
@@ -93,10 +93,10 @@ function Expenses() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchExpenses();
+    fetchExpensesData();
   }, []);
 
-  const fetchExpenses = async () => {
+  const fetchExpensesData = async () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
@@ -104,7 +104,7 @@ function Expenses() {
         toast.error('Please login to view expenses');
         return;
       }
-      const response = await api.get('/api/expenses');
+      const response = await fetchExpenses();
       if (response.data.success) {
         setExpenses(response.data.data);
       }
@@ -152,9 +152,9 @@ function Expenses() {
 
   const handleDeleteConfirm = async () => {
     try {
-      await api.delete(`/api/expenses/${selectedExpense.id}`);
+      await deleteExpense(selectedExpense.id);
       toast.success('Expense deleted successfully');
-      fetchExpenses();
+      fetchExpensesData();
     } catch (error) {
       toast.error('Failed to delete expense');
     }

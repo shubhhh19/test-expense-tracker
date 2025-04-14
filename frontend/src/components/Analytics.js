@@ -23,7 +23,7 @@ import {
 } from 'chart.js';
 import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import { toast } from 'react-toastify';
-import api from '../services/api';
+import { fetchAnalyticsTrend, fetchAnalyticsSummary, fetchAnalyticsBudget } from '../services/apiService';
 
 ChartJS.register(
   CategoryScale,
@@ -71,9 +71,9 @@ function Analytics() {
       const startDateStr = startDate.toISOString().split('T')[0];
 
       const [monthlyTrends, summaryResponse, budgetAnalysis] = await Promise.all([
-        api.get('/api/analytics/trend', { params: { months: 12 } }),
-        api.get('/api/analytics/summary', { params: { startDate: startDateStr, endDate } }),
-        api.get('/api/analytics/budget-analysis', { params: { startDate: startDateStr, endDate } })
+        fetchAnalyticsTrend(12),
+        fetchAnalyticsSummary(startDateStr, endDate),
+        fetchAnalyticsBudget(startDateStr, endDate)
       ]);
 
       console.log('Monthly Trends:', monthlyTrends.data);
