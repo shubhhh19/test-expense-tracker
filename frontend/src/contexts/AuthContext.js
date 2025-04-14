@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const loadUser = async () => {
     try {
-      const res = await api.get('/auth/me');
+      const res = await api.get('/api/auth/me');
       setUser(res.data);
     } catch (err) {
       localStorage.removeItem('token');
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      const res = await api.post('/auth/register', formData);
+      const res = await api.post('/api/auth/register', formData);
       if (res.data && res.data.token) {
         localStorage.setItem('token', res.data.token);
         api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const res = await api.post('/auth/login', formData);
+      const res = await api.post('/api/auth/login', formData);
       localStorage.setItem('token', res.data.token);
       api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
       await loadUser();
@@ -84,7 +84,7 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (formData) => {
     try {
-      const res = await api.put('/auth/me', formData);
+      const res = await api.put('/api/auth/me', formData);
       setUser(res.data);
       toast.success('Profile updated successfully');
       return true;
@@ -96,7 +96,7 @@ export const AuthProvider = ({ children }) => {
 
   const forgotPassword = async (email) => {
     try {
-      await api.post('/auth/forgot-password', { email });
+      await api.post('/api/auth/forgot-password', { email });
       toast.success('Password reset email sent. Please check your inbox.');
       return true;
     } catch (err) {
@@ -107,7 +107,7 @@ export const AuthProvider = ({ children }) => {
 
   const resetPassword = async (token, password) => {
     try {
-      await api.post('/auth/reset-password', { token, password });
+      await api.post('/api/auth/reset-password', { token, password });
       toast.success('Password reset successful. Please login with your new password.');
       return true;
     } catch (err) {
@@ -118,7 +118,7 @@ export const AuthProvider = ({ children }) => {
 
   const verifyEmail = async (token) => {
     try {
-      await api.get(`/auth/verify-email?token=${token}`);
+      await api.get(`/api/auth/verify-email?token=${token}`);
       toast.success('Email verified successfully');
       return true;
     } catch (err) {
